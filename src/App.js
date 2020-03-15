@@ -51,7 +51,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pokemon: [],
+      pokemonList: [],
       min: 0,
       max: 0,
       bagFilter: false,
@@ -76,7 +76,7 @@ class App extends Component {
     Promise.all(promises).then(values => {
       const data = values.map(val => val.data);
       this.setState(prevState => ({
-        pokemon: [...prevState.pokemon, ...data],
+        pokemonList: [...prevState.pokemonList, ...data],
         min: newMin,
         max: safeMax,
       }));
@@ -88,7 +88,7 @@ class App extends Component {
   }
 
   render() {
-    const { max, pokemon, bagFilter } = this.state;
+    const { max, pokemonList, bagFilter } = this.state;
     console.log(this.state);
     return (
       <LandingPage>
@@ -114,7 +114,7 @@ class App extends Component {
             </div>
           }>
           <PokemonList>
-            {this.state.pokemon.map(pokemon => {
+            {pokemonList.map(pokemon => {
               return (
                 <PokemonContainer key={pokemon.id}>
                   <Pokemon
