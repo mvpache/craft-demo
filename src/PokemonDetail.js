@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import {} from 'react-router-dom';
 
 class PokemonDetail extends Component {
   constructor(props) {
@@ -16,28 +17,16 @@ class PokemonDetail extends Component {
   }
 
   render() {
-    return <div>{this.props.pokemon.name}</div>;
+    const { pokemonList } = this.props;
+    const { id } = this.props.match.params;
+    console.log(this.props);
+    const pokemon = pokemonList.find(_pokemon => _pokemon.id == id);
+    return <div>{pokemon.name}</div>;
   }
 }
 
+export default PokemonDetail;
+
 PokemonDetail.propTypes = {
-  pokemon: PropTypes.shape({
-    name: PropTypes.string,
-    height: PropTypes.string,
-    weight: PropTypes.string,
-    type: PropTypes.string,
-    sprites: PropTypes.arrayOf(
-      PropTypes.shape({
-        front_default: PropTypes.string,
-      })
-    ),
-    abilities: PropTypes.arrayOf(
-      PropTypes.shape({
-        ability: PropTypes.shape({
-          name: PropTypes.string,
-        }),
-      })
-    ),
-  }).isRequired,
-  toggleBaggedPokemon: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
 };
