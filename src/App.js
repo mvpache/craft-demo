@@ -11,6 +11,12 @@ const LandingPage = styled.div`
   align-items: center;
 `;
 
+const ListContainer = styled.div`
+  height: 500px;
+  min-width: 350px;
+  overflow: auto;
+`;
+
 const PokemonList = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -119,30 +125,33 @@ class App extends Component {
           value={searchFilter}
           onChange={e => this.updateSearchFilter(e.target.value)}
         />
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={() => this.loadPokemon(max + 1, max + 25)}
-          hasMore={max < 151}
-          loader={
-            <div className="loader" key={0}>
-              Loading ...
-            </div>
-          }>
-          <PokemonList>
-            {pokemonList.map(pokemon => {
-              return (
-                pokemon.name.includes(searchFilter) && (
-                  <PokemonContainer key={pokemon.id}>
-                    <Pokemon
-                      name={pokemon.name}
-                      imgUrl={pokemon.sprites.front_default}
-                    />
-                  </PokemonContainer>
-                )
-              );
-            })}
-          </PokemonList>
-        </InfiniteScroll>
+        <ListContainer>
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={() => this.loadPokemon(max + 1, max + 15)}
+            hasMore={max < 151}
+            useWindow={false}
+            loader={
+              <div className="loader" key={0}>
+                Loading ...
+              </div>
+            }>
+            <PokemonList>
+              {pokemonList.map(pokemon => {
+                return (
+                  pokemon.name.includes(searchFilter) && (
+                    <PokemonContainer key={pokemon.id}>
+                      <Pokemon
+                        name={pokemon.name}
+                        imgUrl={pokemon.sprites.front_default}
+                      />
+                    </PokemonContainer>
+                  )
+                );
+              })}
+            </PokemonList>
+          </InfiniteScroll>
+        </ListContainer>
       </LandingPage>
     );
   }
