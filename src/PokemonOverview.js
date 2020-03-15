@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import Pokemon from './Pokemon';
 
@@ -130,3 +131,9 @@ class PokemonOverview extends Component {
 }
 
 export default PokemonOverview;
+
+PokemonOverview.propTypes = {
+  pokemonList: PropTypes.array.isRequired,
+  max: PropTypes.number.isRequired,
+  loadMore: PropTypes.func.isRequired,
+};

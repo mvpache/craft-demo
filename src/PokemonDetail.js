@@ -20,7 +20,7 @@ class PokemonDetail extends Component {
     const { pokemonList } = this.props;
     const { id } = this.props.match.params;
     console.log(this.props);
-    const pokemon = pokemonList.find(_pokemon => _pokemon.id == id);
+    const pokemon = pokemonList.find(_pokemon => _pokemon.id === id);
     return <div>{pokemon.name}</div>;
   }
 }
@@ -28,5 +28,5 @@ class PokemonDetail extends Component {
 export default PokemonDetail;
 
 PokemonDetail.propTypes = {
-  id: PropTypes.string.isRequired,
+  pokemonList: PropTypes.array.isRequired,
 };
