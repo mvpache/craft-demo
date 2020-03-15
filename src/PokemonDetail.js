@@ -20,6 +20,11 @@ const Info = styled.div`
   height: 30%;
 `;
 
+const BagToggle = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 class PokemonDetail extends Component {
   constructor(props) {
     super(props);
@@ -81,6 +86,10 @@ class PokemonDetail extends Component {
                     </Fragment>
                   ))}
                 </p>
+                <BagToggle>
+                  <p>In Bag: </p>
+                  <input type="checkbox" />
+                </BagToggle>
               </Info>
             </Details>
             <div>
