@@ -5,6 +5,12 @@ import styled from 'styled-components';
 
 import Pokemon from './Pokemon';
 
+const LandingPage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const PokemonList = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -14,6 +20,14 @@ const PokemonList = styled.div`
 
 const PokemonContainer = styled.div`
   width: 20%;
+`;
+
+const ButtonContainer = styled.div`
+  margin: 5%;
+`;
+
+const FilterButton = styled.button`
+  background: ${props => (props.active ? 'lightBlue' : 'white')};
 `;
 
 // DEMO NOTES/TODOS
@@ -40,6 +54,7 @@ class App extends Component {
       pokemon: [],
       min: 0,
       max: 0,
+      bagFilter: false,
     };
   }
 
@@ -68,33 +83,50 @@ class App extends Component {
     });
   }
 
+  setBagFilter(value) {
+    this.setState({ bagFilter: value });
+  }
+
   render() {
-    const { max, pokemon } = this.state;
-    console.log(pokemon);
+    const { max, pokemon, bagFilter } = this.state;
+    console.log(this.state);
     return (
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={() => this.loadPokemon(max + 1, max + 25)}
-        hasMore={max < 151}
-        loader={
-          <div className="loader" key={0}>
-            Loading ...
-          </div>
-        }>
-        <PokemonList>
-          {this.state.pokemon.map(pokemon => {
-            return (
-              <PokemonContainer>
-                <Pokemon
-                  key={pokemon.id}
-                  name={pokemon.name}
-                  imgUrl={pokemon.sprites.front_default}
-                />
-              </PokemonContainer>
-            );
-          })}
-        </PokemonList>
-      </InfiniteScroll>
+      <LandingPage>
+        <ButtonContainer>
+          <FilterButton
+            active={!bagFilter}
+            onClick={() => this.setBagFilter(false)}>
+            ALL
+          </FilterButton>
+          <FilterButton
+            active={bagFilter}
+            onClick={() => this.setBagFilter(true)}>
+            BAG
+          </FilterButton>
+        </ButtonContainer>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={() => this.loadPokemon(max + 1, max + 25)}
+          hasMore={max < 151}
+          loader={
+            <div className="loader" key={0}>
+              Loading ...
+            </div>
+          }>
+          <PokemonList>
+            {this.state.pokemon.map(pokemon => {
+              return (
+                <PokemonContainer key={pokemon.id}>
+                  <Pokemon
+                    name={pokemon.name}
+                    imgUrl={pokemon.sprites.front_default}
+                  />
+                </PokemonContainer>
+              );
+            })}
+          </PokemonList>
+        </InfiniteScroll>
+      </LandingPage>
     );
   }
 }
