@@ -2,7 +2,23 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
+const PokemonDetailsContainer = styled.div`
+  display: flex;
+`;
+
+const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin: 2% 5%;
+`;
+
+const Info = styled.div`
+  height: 30%;
+`;
 
 class PokemonDetail extends Component {
   constructor(props) {
@@ -34,30 +50,36 @@ class PokemonDetail extends Component {
     return (
       <Fragment>
         {pokemon !== undefined ? (
-          <div>
-            <div>
-              <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-              <p>Height: {pokemon.height}</p>
-              <p>Weight: {pokemon.weight}</p>
-              <p>
-                Type:
-                {pokemon.types.map(type => (
-                  <Fragment key={type.slot}> {type.type.name}</Fragment>
-                ))}
-              </p>
-              <p>
-                Pikachu is a yellow mouse Pokémon from the fictional Pokémon
-                world that was created by Satoshi Tajiri. It is 0.4 m tall and
-                it weighs 6.0 kg. The skin color is yellow with brown markings
-                covering the lower portion of its back. Female Pikachu has a
-                heart-shaped tail.
-              </p>
-            </div>
+          <PokemonDetailsContainer>
+            <Details>
+              <img
+                src={pokemon.sprites.front_default}
+                alt={pokemon.name}
+                style={{ height: '250px' }}
+              />
+              <Info>
+                <p>Height: {pokemon.height}</p>
+                <p>Weight: {pokemon.weight}</p>
+                <p>
+                  Type:
+                  {pokemon.types.map(type => (
+                    <Fragment key={type.slot}> {type.type.name}</Fragment>
+                  ))}
+                </p>
+                <p>
+                  Pikachu is a yellow mouse Pokémon from the fictional Pokémon
+                  world that was created by Satoshi Tajiri. It is 0.4 m tall and
+                  it weighs 6.0 kg. The skin color is yellow with brown markings
+                  covering the lower portion of its back. Female Pikachu has a
+                  heart-shaped tail.
+                </p>
+              </Info>
+            </Details>
             <div>
               <Map
                 google={this.props.google}
                 zoom={10}
-                style={{ height: '500px', width: '500px' }}
+                style={{ height: '60%', width: '60%' }}
                 initialCenter={{
                   lat: 32.819218,
                   lng: -117.034432,
@@ -73,7 +95,7 @@ class PokemonDetail extends Component {
                 })}
               </Map>
             </div>
-          </div>
+          </PokemonDetailsContainer>
         ) : (
           <div />
         )}
