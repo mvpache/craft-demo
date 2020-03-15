@@ -1,26 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+// DEMO NOTES/TODOS
+// Use styled-components
+// use standard ui components (no material ui/bootstrap)
+// Can use redux but I'm doubtful it will be needed
+// can use webpack, but not sure if I need to bother with changing the standard CRA webpack
+// unit test for atleast two files, show why you tested them and how you tested them
+
+// Components/design
+// main page:
+// A "pokemon" component that shows name + image -> links to detail page
+// switch filter for all/saved
+// search box
+// detail page
+// shows image, height, weight, type and mock description
+// has a switch for saving(bagging) pokemon
+// lists abilities -> all this under detailedPokemon component
+// display google maps location -> map component? -> https://www.npmjs.com/package/google-map-react
+
+//TODO: init and first commit
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <div>Craft Demo</div>;
 }
 
 export default App;
