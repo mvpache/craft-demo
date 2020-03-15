@@ -42,7 +42,6 @@ class PokemonDetail extends Component {
   }
 
   render() {
-    console.log(this.state.locations);
     const { pokemonList } = this.props;
     const { id } = this.props.match.params;
     const locations = this.state.locations;
@@ -72,6 +71,15 @@ class PokemonDetail extends Component {
                   it weighs 6.0 kg. The skin color is yellow with brown markings
                   covering the lower portion of its back. Female Pikachu has a
                   heart-shaped tail.
+                </p>
+                <p>
+                  Abilities:
+                  {pokemon.abilities.map(ability => (
+                    <Fragment key={ability.slot}>
+                      {' '}
+                      {ability.ability.name}
+                    </Fragment>
+                  ))}
                 </p>
               </Info>
             </Details>
