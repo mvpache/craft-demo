@@ -12,6 +12,6 @@ const Pokemon = ({ name, imgUrl }) => (
 export default Pokemon;
 
 Pokemon.propTypes = {
-  name: PropTypes.string,
-  imgUrl: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  imgUrl: PropTypes.string.isRequired,
 };

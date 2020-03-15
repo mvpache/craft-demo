@@ -40,6 +40,16 @@ const SearchBox = styled.input`
   margin: 1% 0 5% 0;
 `;
 
+const debounce = (func, delay) => {
+  let inDebounce;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(inDebounce);
+    inDebounce = setTimeout(() => func.apply(context, args), delay);
+  };
+};
+
 // DEMO NOTES/TODOS
 // Use styled-components
 // use standard ui components (no material ui/bootstrap)
@@ -62,10 +72,10 @@ class App extends Component {
     super(props);
     this.state = {
       pokemonList: [],
-      min: 0,
       max: 0,
       bagFilter: false,
       searchFilter: '',
+      loadMore: true,
     };
   }
 
@@ -73,14 +83,14 @@ class App extends Component {
   //   this.loadPokemon(1, 25);
   // }
 
-  loadPokemon(newMin, newMax) {
+  loadPokemon(min, newMax) {
     // loading function for when scrolling
     let promises = [];
     // need to make max doesn't pass 151 so we don't 2nd Gen pokemon
-    const safeMax = newMax > 151 ? 151 : newMax;
 
+    const safeMax = newMax > 151 ? 151 : newMax;
     // grab this set of pokemon
-    for (let i = newMin; i < safeMax + 1; i++) {
+    for (let i = min; i < safeMax + 1; i++) {
       promises.push(axios.get(`https://pokeapi.co/api/v2/pokemon/${i}/`));
     }
 
@@ -88,8 +98,8 @@ class App extends Component {
       const data = values.map(val => val.data);
       this.setState(prevState => ({
         pokemonList: [...prevState.pokemonList, ...data],
-        min: newMin,
         max: safeMax,
+        loadMore: safeMax < 151,
       }));
     });
   }
@@ -103,7 +113,7 @@ class App extends Component {
   }
 
   render() {
-    const { max, pokemonList, bagFilter, searchFilter } = this.state;
+    const { max, pokemonList, bagFilter, searchFilter, loadMore } = this.state;
     console.log(this.state);
     return (
       <LandingPage>
@@ -123,13 +133,17 @@ class App extends Component {
           type="text"
           placeholder="search"
           value={searchFilter}
-          onChange={e => this.updateSearchFilter(e.target.value)}
+          onChange={e =>
+            debounce(this.updateSearchFilter(e.target.value).bind(this), 500)
+          }
         />
         <ListContainer>
           <InfiniteScroll
             pageStart={0}
-            loadMore={() => this.loadPokemon(max + 1, max + 15)}
-            hasMore={max < 151}
+            loadMore={() => {
+              this.loadPokemon(max + 1, max + 15);
+            }}
+            hasMore={loadMore}
             useWindow={false}
             loader={
               <div className="loader" key={0}>
