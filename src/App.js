@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import Pokemon from './Pokemon';
+
 // DEMO NOTES/TODOS
 // Use styled-components
 // use standard ui components (no material ui/bootstrap)
@@ -11,7 +13,6 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 // Components/design
 // main page:
-// A "pokemon" component that shows name + image -> links to detail page
 // switch filter for all/saved
 // search box
 // detail page
@@ -35,11 +36,16 @@ class App extends Component {
   // }
 
   loadPokemon(newMin, newMax) {
+    // loading function for when scrolling
     let promises = [];
+    // need to make max doesn't pass 151 so we don't 2nd Gen pokemon
     const safeMax = newMax > 151 ? 151 : newMax;
+
+    // grab this set of pokemon
     for (let i = newMin; i < safeMax + 1; i++) {
       promises.push(axios.get(`https://pokeapi.co/api/v2/pokemon/${i}/`));
     }
+
     Promise.all(promises).then(values => {
       const data = values.map(val => val.data);
       this.setState(prevState => ({
@@ -51,7 +57,7 @@ class App extends Component {
   }
 
   render() {
-    const { min, max, pokemon } = this.state;
+    const { max, pokemon } = this.state;
     console.log(pokemon);
     return (
       <InfiniteScroll
@@ -63,9 +69,17 @@ class App extends Component {
             Loading ...
           </div>
         }>
-        {this.state.pokemon.map((pokemon, index) => {
-          return <h4 key={index}>{pokemon.name}</h4>;
-        })}
+        <div>
+          {this.state.pokemon.map(pokemon => {
+            return (
+              <Pokemon
+                key={pokemon.id}
+                name={pokemon.name}
+                imgUrl={pokemon.sprites.front_default}
+              />
+            );
+          })}
+        </div>
       </InfiniteScroll>
     );
   }
