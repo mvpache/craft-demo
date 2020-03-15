@@ -77,6 +77,7 @@ class PokemonOverview extends Component {
   render() {
     const { bagFilter, searchFilter } = this.state;
     const { pokemonList, max, loadMore } = this.props;
+    console.log(pokemonList);
     return (
       <PokemonOverviewContainer>
         <ButtonContainer>
