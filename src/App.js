@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
+import axios from 'axios';
+import InfiniteScroll from 'react-infinite-scroller';
 
 // DEMO NOTES/TODOS
 // Use styled-components
@@ -18,10 +20,55 @@ import React from 'react';
 // lists abilities -> all this under detailedPokemon component
 // display google maps location -> map component? -> https://www.npmjs.com/package/google-map-react
 
-//TODO: init and first commit
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pokemon: [],
+      min: 0,
+      max: 0,
+    };
+  }
 
-function App() {
-  return <div>Craft Demo</div>;
+  // componentDidMount() {
+  //   this.loadPokemon(1, 25);
+  // }
+
+  loadPokemon(newMin, newMax) {
+    let promises = [];
+    const safeMax = newMax > 151 ? 151 : newMax;
+    for (let i = newMin; i < safeMax + 1; i++) {
+      promises.push(axios.get(`https://pokeapi.co/api/v2/pokemon/${i}/`));
+    }
+    Promise.all(promises).then(values => {
+      const data = values.map(val => val.data);
+      this.setState(prevState => ({
+        pokemon: [...prevState.pokemon, ...data],
+        min: newMin,
+        max: safeMax,
+      }));
+    });
+  }
+
+  render() {
+    const { min, max, pokemon } = this.state;
+    console.log(pokemon);
+    return (
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={() => this.loadPokemon(max + 1, max + 25)}
+        hasMore={max < 151}
+        loader={
+          <div className="loader" key={0}>
+            Loading ...
+          </div>
+        }>
+        {this.state.pokemon.map((pokemon, index) => {
+          return <h4 key={index}>{pokemon.name}</h4>;
+        })}
+      </InfiniteScroll>
+    );
+  }
 }
 
 export default App;
