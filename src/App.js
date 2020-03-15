@@ -23,11 +23,15 @@ const PokemonContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  margin: 5%;
+  margin: 5% 0 0 0;
 `;
 
 const FilterButton = styled.button`
   background: ${props => (props.active ? 'lightBlue' : 'white')};
+`;
+
+const SearchBox = styled.input`
+  margin: 1% 0 5% 0;
 `;
 
 // DEMO NOTES/TODOS
@@ -55,6 +59,7 @@ class App extends Component {
       min: 0,
       max: 0,
       bagFilter: false,
+      searchFilter: '',
     };
   }
 
@@ -87,8 +92,12 @@ class App extends Component {
     this.setState({ bagFilter: value });
   }
 
+  updateSearchFilter(value) {
+    this.setState({ searchFilter: value });
+  }
+
   render() {
-    const { max, pokemonList, bagFilter } = this.state;
+    const { max, pokemonList, bagFilter, searchFilter } = this.state;
     console.log(this.state);
     return (
       <LandingPage>
@@ -104,6 +113,12 @@ class App extends Component {
             BAG
           </FilterButton>
         </ButtonContainer>
+        <SearchBox
+          type="text"
+          placeholder="search"
+          value={searchFilter}
+          onChange={e => this.updateSearchFilter(e.target.value)}
+        />
         <InfiniteScroll
           pageStart={0}
           loadMore={() => this.loadPokemon(max + 1, max + 25)}
@@ -116,12 +131,14 @@ class App extends Component {
           <PokemonList>
             {pokemonList.map(pokemon => {
               return (
-                <PokemonContainer key={pokemon.id}>
-                  <Pokemon
-                    name={pokemon.name}
-                    imgUrl={pokemon.sprites.front_default}
-                  />
-                </PokemonContainer>
+                pokemon.name.includes(searchFilter) && (
+                  <PokemonContainer key={pokemon.id}>
+                    <Pokemon
+                      name={pokemon.name}
+                      imgUrl={pokemon.sprites.front_default}
+                    />
+                  </PokemonContainer>
+                )
               );
             })}
           </PokemonList>
