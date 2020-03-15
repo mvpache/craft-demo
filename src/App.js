@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
+import styled from 'styled-components';
 
 import Pokemon from './Pokemon';
+
+const PokemonList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 10%;
+  justify-content: space-between;
+`;
+
+const PokemonContainer = styled.div`
+  width: 20%;
+`;
 
 // DEMO NOTES/TODOS
 // Use styled-components
@@ -69,17 +81,19 @@ class App extends Component {
             Loading ...
           </div>
         }>
-        <div>
+        <PokemonList>
           {this.state.pokemon.map(pokemon => {
             return (
-              <Pokemon
-                key={pokemon.id}
-                name={pokemon.name}
-                imgUrl={pokemon.sprites.front_default}
-              />
+              <PokemonContainer>
+                <Pokemon
+                  key={pokemon.id}
+                  name={pokemon.name}
+                  imgUrl={pokemon.sprites.front_default}
+                />
+              </PokemonContainer>
             );
           })}
-        </div>
+        </PokemonList>
       </InfiniteScroll>
     );
   }
