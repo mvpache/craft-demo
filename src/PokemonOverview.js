@@ -80,7 +80,7 @@ class PokemonOverview extends Component {
 
     if (name.includes(searchFilter)) {
       if (bagFilter) {
-        if (bag.includes(id.toString())) {
+        if (bag !== null && bag.includes(id.toString())) {
           // passed search and bag filter
           return true;
         } else {
