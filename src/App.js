@@ -26,12 +26,33 @@ class App extends Component {
       promises.push(axios.get(`https://pokeapi.co/api/v2/pokemon/${i}/`));
     }
 
+    const listFilter = list => {
+      // a bug where typing too quickly will cause duplicates has been happening
+      // tried to fixing it with throttling/debouncing but was having trouble
+      // this is a less ideal fix where the list gets filtered anytime it breaks 151 in length
+      // the bug only happens when the list hasnt been filled out completely
+
+      const idList = [];
+      const filteredList = [];
+      list.forEach(pokemon => {
+        if (!idList.includes(pokemon.id)) {
+          idList.push(pokemon.id);
+          filteredList.push(pokemon);
+        }
+      });
+
+      return filteredList;
+    };
+
     Promise.all(promises).then(values => {
       const data = values.map(val => val.data);
-      this.setState(prevState => ({
-        pokemonList: [...prevState.pokemonList, ...data],
-        max: safeMax,
-      }));
+      this.setState(prevState => {
+        const newList = [...prevState.pokemonList, ...data];
+        return {
+          pokemonList: newList.length > 151 ? listFilter(newList) : newList,
+          max: safeMax,
+        };
+      });
     });
   }
 
