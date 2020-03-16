@@ -136,5 +136,4 @@ export default PokemonOverview;
 PokemonOverview.propTypes = {
   pokemonList: PropTypes.array.isRequired,
   max: PropTypes.number.isRequired,
-  loadMore: PropTypes.func.isRequired,
 };
