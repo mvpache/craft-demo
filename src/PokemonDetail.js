@@ -30,6 +30,7 @@ class PokemonDetail extends Component {
     super(props);
     this.state = {
       locations: [],
+      inBag: false,
     };
   }
 
@@ -44,12 +45,38 @@ class PokemonDetail extends Component {
       .then(res => {
         this.setState({ locations: res.data.locations });
       });
+    const bag = localStorage.getItem('bag');
+    if (bag !== null) {
+      if (JSON.parse(bag).includes(id.toString())) {
+        this.setState({ inBag: true });
+      }
+    }
+  }
+
+  toggleBag() {
+    const { id } = this.props.match.params;
+    const bag = localStorage.getItem('bag');
+    if (bag !== null) {
+      const newBag = JSON.parse(bag);
+      if (newBag.includes(id)) {
+        newBag.splice(newBag.indexOf(id), 1);
+        localStorage.setItem('bag', JSON.stringify(newBag));
+        this.setState({ inBag: false });
+      } else {
+        newBag.push(id);
+        localStorage.setItem('bag', JSON.stringify(newBag));
+        this.setState({ inBag: true });
+      }
+    } else {
+      localStorage.setItem('bag', JSON.stringify([id]));
+      this.setState({ inBag: true });
+    }
   }
 
   render() {
     const { pokemonList } = this.props;
     const { id } = this.props.match.params;
-    const locations = this.state.locations;
+    const { locations, inBag } = this.state;
     const pokemon = pokemonList.find(_pokemon => _pokemon.id == id);
     return (
       <Fragment>
@@ -88,7 +115,13 @@ class PokemonDetail extends Component {
                 </p>
                 <BagToggle>
                   <p>In Bag: </p>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    name="inBag"
+                    checked={inBag}
+                    value={inBag}
+                    onChange={() => this.toggleBag()}
+                  />
                 </BagToggle>
               </Info>
             </Details>

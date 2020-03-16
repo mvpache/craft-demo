@@ -74,6 +74,29 @@ class PokemonOverview extends Component {
     this.setState({ searchFilter: value });
   }
 
+  showPokemon(name, id) {
+    const { bagFilter, searchFilter } = this.state;
+    const bag = JSON.parse(localStorage.getItem('bag'));
+
+    if (name.includes(searchFilter)) {
+      if (bagFilter) {
+        if (bag.includes(id.toString())) {
+          // passed search and bag filter
+          return true;
+        } else {
+          // failed bag filter
+          return false;
+        }
+      } else {
+        // passed search filter, and theres no bag filter
+        return true;
+      }
+    } else {
+      // failed search filter
+      return false;
+    }
+  }
+
   render() {
     const { bagFilter, searchFilter } = this.state;
     const { pokemonList, max, loadMore } = this.props;
@@ -112,7 +135,7 @@ class PokemonOverview extends Component {
             <PokemonList>
               {pokemonList.map(pokemon => {
                 return (
-                  pokemon.name.includes(searchFilter) && (
+                  this.showPokemon(pokemon.name, pokemon.id) && (
                     <PokemonContainer key={pokemon.id}>
                       <Pokemon
                         name={pokemon.name}
